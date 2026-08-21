@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/resources")
-@CrossOrigin(origins = "http://localhost:5173") // adjust when you build the frontend
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174"})
 public class ResourceController {
 
     @Autowired
