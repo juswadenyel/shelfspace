@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ShelfspaceApplication<shelfspace>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.shelfspace.shelfspace.ShelfspaceApplication",
+            "projectName": "shelfspace",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
