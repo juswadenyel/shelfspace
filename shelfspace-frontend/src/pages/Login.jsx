@@ -43,7 +43,7 @@ function Login() {
     setIsSubmitting(true)
     try {
       const result = await loginUser(form)
-      login(result.email || form.email)
+      login(result.email || form.email, result.token)
       navigate('/dashboard', { replace: true })
     } catch (requestError) {
       setErrors({ form: requestError.message })

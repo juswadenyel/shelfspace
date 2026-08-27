@@ -1,12 +1,24 @@
 const API_BASE_URL = 'http://localhost:8080/api'
+const STORAGE_KEY = 'shelfspace_auth'
+
+function getToken() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    return raw ? JSON.parse(raw)?.token ?? null : null
+  } catch {
+    return null
+  }
+}
 
 async function request(path, options = {}) {
   const { method = 'GET', body, headers = {} } = options
+  const token = getToken()
 
   const config = {
     method,
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },
   }
@@ -87,4 +99,20 @@ export function returnReservation(id) {
 
 export function deleteReservation(id) {
   return request(`/reservations/${id}`, { method: 'DELETE' })
+}
+
+export function fetchServiceRequests() {
+  return request('/requests')
+}
+
+export function createServiceRequest(serviceRequest) {
+  return request('/requests', { method: 'POST', body: serviceRequest })
+}
+
+export function updateServiceRequest(id, serviceRequest) {
+  return request(`/requests/${id}`, { method: 'PUT', body: serviceRequest })
+}
+
+export function deleteServiceRequest(id) {
+  return request(`/requests/${id}`, { method: 'DELETE' })
 }
