@@ -2,20 +2,35 @@ import { createContext, useContext, useMemo, useState } from 'react'
 
 const AuthContext = createContext(null)
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null)
+const STORAGE_KEY = 'shelfspace_auth'
 
-  const login = (email) => {
-    setUser({ email })
+function readStoredAuth() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    return raw ? JSON.parse(raw) : null
+  } catch {
+    return null
+  }
+}
+
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(() => readStoredAuth())
+
+  const login = (email, token) => {
+    const nextUser = { email, token }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser))
+    setUser(nextUser)
   }
 
   const logout = () => {
+    localStorage.removeItem(STORAGE_KEY)
     setUser(null)
   }
 
   const value = useMemo(
     () => ({
       user,
+      token: user?.token ?? null,
       login,
       logout,
     }),
