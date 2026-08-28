@@ -1,9 +1,10 @@
-import { BookOpenCheck, CalendarClock, LogOut, UserRound, Users } from 'lucide-react'
+import { BookOpenCheck, CalendarClock, ClipboardList, LogOut, UserRound, Users } from 'lucide-react'
 
 const tabs = [
   { key: 'resources', label: 'Resources', icon: BookOpenCheck },
   { key: 'borrowers', label: 'Borrowers', icon: Users },
   { key: 'reservations', label: 'Reservations', icon: CalendarClock },
+  { key: 'requests', label: 'Service Requests', icon: ClipboardList },
 ]
 
 export default function Navbar({ activeTab, onTabChange, userEmail, onLogout }) {

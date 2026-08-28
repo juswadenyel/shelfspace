@@ -1,17 +1,17 @@
 :root {
-  --dashboard-bg: #f3f5fb;
+  --dashboard-bg: #f5f3ee;
   --dashboard-surface: #ffffff;
   --dashboard-muted: #64748b;
-  --dashboard-text: #0f172a;
-  --dashboard-border: #e2e8f0;
-  --dashboard-primary: #4f46e5;
-  --dashboard-primary-dark: #4338ca;
-  --dashboard-primary-soft: rgba(79, 70, 229, 0.08);
+  --dashboard-text: #221f19;
+  --dashboard-border: #e3ded2;
+  --dashboard-primary: #1f5e4a;
+  --dashboard-primary-dark: #143d30;
+  --dashboard-primary-soft: rgba(31, 94, 74, 0.1);
   --dashboard-success: #166534;
   --dashboard-success-bg: #ecfdf5;
   --dashboard-error: #b91c1c;
   --dashboard-error-bg: #fef2f2;
-  --dashboard-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  --dashboard-shadow: 0 20px 48px rgba(34, 31, 25, 0.14);
 }
 
 .dashboard-page {
@@ -19,6 +19,7 @@
   padding: 28px;
   background: var(--dashboard-bg);
   color: var(--dashboard-text);
+  font-family: var(--font-body);
 }
 
 .dashboard-shell {
@@ -53,10 +54,10 @@
   display: grid;
   place-items: center;
   border-radius: 12px;
-  background: linear-gradient(135deg, var(--dashboard-primary), #7c3aed);
+  background: linear-gradient(135deg, var(--dashboard-primary), var(--dashboard-primary-dark));
   color: white;
   font-weight: 800;
-  box-shadow: 0 10px 24px rgba(79, 70, 229, 0.22);
+  box-shadow: 0 10px 24px rgba(31, 94, 74, 0.22);
 }
 
 .brand-kicker {
@@ -110,7 +111,7 @@
 
 .tab-btn.active {
   background: var(--dashboard-primary-soft);
-  border-color: rgba(79, 70, 229, 0.14);
+  border-color: rgba(31, 94, 74, 0.14);
   color: var(--dashboard-primary-dark);
 }
 
@@ -186,11 +187,11 @@
 }
 
 .primary-btn {
-  background: linear-gradient(135deg, var(--dashboard-primary), #6366f1);
+  background: linear-gradient(135deg, var(--dashboard-primary), #2c7259);
   color: white;
   border: none;
   padding: 10px 14px;
-  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.18);
+  box-shadow: 0 8px 20px rgba(31, 94, 74, 0.18);
 }
 
 .primary-btn.small {
@@ -201,14 +202,14 @@
 .secondary-btn {
   background: #eef2ff;
   color: var(--dashboard-primary-dark);
-  border: 1px solid rgba(79, 70, 229, 0.08);
+  border: 1px solid rgba(31, 94, 74, 0.08);
   padding: 10px 14px;
 }
 
 .ghost-btn {
   background: transparent;
   color: var(--dashboard-primary-dark);
-  border: 1px solid rgba(79, 70, 229, 0.18);
+  border: 1px solid rgba(31, 94, 74, 0.18);
   padding: 8px 12px;
 }
 
@@ -300,8 +301,8 @@
 .field input:focus,
 .field select:focus {
   outline: none;
-  border-color: rgba(79, 70, 229, 0.5);
-  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.08);
+  border-color: rgba(31, 94, 74, 0.5);
+  box-shadow: 0 0 0 4px var(--primary-soft);
 }
 
 .field-error {

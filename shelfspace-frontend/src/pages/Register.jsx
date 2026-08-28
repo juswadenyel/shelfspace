@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { registerUser } from '../api/api'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -20,7 +20,7 @@ function validate({ email, password }) {
 function Register() {
   const [form, setForm] = useState({ email: '', password: '' })
   const [errors, setErrors] = useState({})
-  const [message, setMessage] = useState('')
+  const navigate = useNavigate()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   function handleChange(event) {
@@ -38,12 +38,10 @@ function Register() {
       return
     }
 
-    setMessage('')
     setIsSubmitting(true)
     try {
-      const result = await registerUser(form)
-      setMessage(result.message || 'Registration successful')
-      setForm({ email: '', password: '' })
+      await registerUser(form)
+      navigate('/login', { replace: true, state: { justRegistered: true } })
     } catch (requestError) {
       setErrors({ form: requestError.message })
     } finally {
@@ -52,8 +50,9 @@ function Register() {
   }
 
   return (
-    <motion.main className="auth-page" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
-      <section className="auth-card" aria-labelledby="register-heading">
+    <main className="auth-page">
+      <section className="auth-showcase" aria-hidden="true"><div className="showcase-brand"><div className="brand-mark">S</div><strong>ShelfSpace</strong></div><div className="showcase-body"><div className="showcase-ledge" /><h2>Set up your shelf in under a minute.</h2><p>Track resources, borrowers, reservations, and your own service requests in one place.</p></div><div className="showcase-stats"><div><strong>Free</strong><span>For your department</span></div><div><strong>JWT</strong><span>Secured access</span></div></div></section>
+      <div className="auth-form-side"><motion.section className="auth-card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }} aria-labelledby="register-heading">
         <div className="auth-brand">
           <div className="brand-mark">S</div>
           <div>
@@ -78,18 +77,15 @@ function Register() {
           </label>
 
           {errors.form && <p className="message error" role="alert">{errors.form}</p>}
-          {message && <p className="message success" role="status">{message}</p>}
-
           <button type="submit" className="primary-button" disabled={isSubmitting}>
-            {isSubmitting ? 'Creating account…' : 'Register'}
+            {isSubmitting ? 'Creating account…' : 'Create account'}
           </button>
         </form>
 
         <p className="auth-footer">
-          Already have an account? <Link to="/login">Login</Link>
+          Already have an account? <Link to="/login">Log in</Link>
         </p>
-      </section>
-    </motion.main>
+      </motion.section></div></main>
   )
 }
 

@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { loginUser } from '../api/api'
 import { useAuth } from '../context/AuthContext'
+import Toast from '../components/Toast'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -20,10 +21,25 @@ function validate({ email, password }) {
 
 function Login() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { login } = useAuth()
   const [form, setForm] = useState({ email: '', password: '' })
   const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [toasts, setToasts] = useState([])
+
+  const addToast = (type, title, message) => {
+    const id = crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random())
+    setToasts((current) => [...current, { id, type, title, message }])
+    window.setTimeout(() => setToasts((current) => current.filter((toast) => toast.id !== id)), 4500)
+  }
+
+  useEffect(() => {
+    if (location.state?.justRegistered) {
+      addToast('success', 'Account created', 'You can log in now.')
+      window.history.replaceState({}, document.title)
+    }
+  }, [location.state])
 
   function handleChange(event) {
     const { name, value } = event.target
@@ -46,24 +62,29 @@ function Login() {
       login(result.email || form.email, result.token)
       navigate('/dashboard', { replace: true })
     } catch (requestError) {
-      setErrors({ form: requestError.message })
+      addToast('error', 'Login failed', 'Invalid email or password.')
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <motion.main className="auth-page" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
-      <section className="auth-card" aria-labelledby="login-heading">
+    <main className="auth-page">
+      <section className="auth-showcase" aria-hidden="true">
+        <div className="showcase-brand"><div className="brand-mark">S</div><strong>ShelfSpace</strong></div>
+        <div className="showcase-body"><div className="showcase-ledge" /><h2>Every resource, borrower, and request in one shelf.</h2><p>Keep lending and service requests organized for staff who need clarity, not clutter.</p></div>
+        <div className="showcase-stats"><div><strong>24/7</strong><span>Availability</span></div><div><strong>100%</strong><span>Owner-only access</span></div></div>
+      </section>
+      <div className="auth-form-side"><motion.section className="auth-card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }} aria-labelledby="login-heading">
         <div className="auth-brand">
           <div className="brand-mark">S</div>
           <div>
             <p className="eyebrow">Welcome back</p>
-            <h1 id="login-heading">ShelfSpace</h1>
+            <h1 id="login-heading">Log in</h1>
           </div>
         </div>
 
-        <p className="auth-copy">Log in to manage resources, borrowers, and bookings.</p>
+        <p className="auth-copy">Log in to manage resources, borrowers, and service requests.</p>
 
         <form onSubmit={handleSubmit} noValidate>
           <label htmlFor="login-email">
@@ -78,18 +99,15 @@ function Login() {
             {errors.password && <small>{errors.password}</small>}
           </label>
 
-          {errors.form && <p className="message error" role="alert">{errors.form}</p>}
-
           <button type="submit" className="primary-button" disabled={isSubmitting}>
-            {isSubmitting ? 'Logging in…' : 'Login'}
+            {isSubmitting ? 'Logging in…' : 'Log in'}
           </button>
         </form>
 
         <p className="auth-footer">
-          Don’t have an account? <Link to="/register">Register</Link>
+          Don’t have an account? <Link to="/register">Create one</Link>
         </p>
-      </section>
-    </motion.main>
+      </motion.section></div><Toast toasts={toasts} onClose={(id) => setToasts((current) => current.filter((toast) => toast.id !== id))} /></main>
   )
 }
 
